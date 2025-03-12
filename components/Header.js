@@ -85,7 +85,7 @@ export default function Header({ handleAsideOpen }) {
           <img src="/img/notification.png" alt="notification" />
         </div>
         <div className="profilenav">
-          <img src="/img/user.png" alt="user" />
+          <img src="/img/egeclogo.jpg" className=" w-8" alt="user" />
         </div>
       </div>
     </header>

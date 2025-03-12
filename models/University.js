@@ -9,20 +9,19 @@ const collegeSchema = new mongoose.Schema({
   name: { type: String, required: true },
   type: {
     type: String,
-    required: true,
   },
 });
 
 const universitySchema = new mongoose.Schema({
   name: { type: String, required: true },
+  country: { type: String, required: true },
   email: { type: String },
   website: { type: String },
   phone: { type: String },
   location: { type: String },
-  logo: { type: String },
+  images: [{ type: String }],
   status: {
     type: String,
-    enum: ["draft", "published", "archived"],
     default: "draft",
   },
   createdAt: { type: Date, default: Date.now },

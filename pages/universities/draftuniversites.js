@@ -101,7 +101,7 @@ export default function DraftUniversities() {
                     </td>
                     <td className="px-5 py-4 text-center">
                       <img
-                        src={university.logo}
+                        src={university.images[0]}
                         alt={university.name}
                         className="w-16 h-16 object-cover rounded-md shadow-sm"
                       />

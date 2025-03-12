@@ -9,6 +9,8 @@ import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/router";
 import LoginLayout from "./LoginLayout";
 import { signOut, useSession } from "next-auth/react";
+// import { FaUniversity } from "react-icons/fa";
+import { LiaUniversitySolid } from "react-icons/lia";
 
 export default function Aside({ asideOpen }) {
   const router = useRouter();
@@ -51,7 +53,7 @@ export default function Aside({ asideOpen }) {
             </li>
 
             {/* Blogs */}
-            <li
+            {/* <li
               className={
                 activeLink.includes("/blogs")
                   ? "navactive flex-col flex-left"
@@ -79,7 +81,7 @@ export default function Aside({ asideOpen }) {
                   </Link>
                 </ul>
               )}
-            </li>
+            </li> */}
 
             {/* Projects */}
             <li
@@ -125,7 +127,7 @@ export default function Aside({ asideOpen }) {
                 onClick={() => handleLinkClick("/universities")}
                 onMouseEnter={() => router.prefetch("/universities")}
               >
-                <BsPostcard />
+                <LiaUniversitySolid />
                 <span>universities</span>
               </div>
               {activeLink.includes("/universities") && (
@@ -144,7 +146,7 @@ export default function Aside({ asideOpen }) {
             </li>
 
             {/* Shops */}
-            <li
+            {/* <li
               className={
                 activeLink.includes("/shops")
                   ? "navactive flex-col flex-left"
@@ -172,10 +174,10 @@ export default function Aside({ asideOpen }) {
                   </Link>
                 </ul>
               )}
-            </li>
+            </li> */}
 
             {/* Gallery */}
-            <li
+            {/* <li
               className={
                 activeLink.includes("/gallery")
                   ? "navactive flex-col flex-left"
@@ -200,17 +202,17 @@ export default function Aside({ asideOpen }) {
                   </Link>
                 </ul>
               )}
-            </li>
+            </li> */}
 
             {/* Contacts */}
-            <li
+            {/* <li
               className={activeLink === "/contacts" ? "navactive" : ""}
               onClick={() => handleLinkClick("/contacts")}
               onMouseEnter={() => router.prefetch("/contacts")}
             >
               <TiContacts />
               <span>Contacts</span>
-            </li>
+            </li> */}
 
             {/* Settings */}
             <li

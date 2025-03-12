@@ -1,3 +1,4 @@
+// cm
 import ReactMarkdown from "react-markdown";
 import MarkdownEditor from "react-markdown-editor-lite";
 import "react-markdown-editor-lite/lib/index.css";
@@ -10,15 +11,6 @@ import toast from "react-hot-toast";
 import { ReactSortable } from "react-sortablejs";
 import { MdDeleteForever } from "react-icons/md";
 
-// title,
-// slug,
-// images,
-// description,
-// client,
-// projectcategory,
-// tags,
-// livepreview,
-// status,
 export default function Project({
   _id,
   title: existingTitle,
@@ -119,17 +111,10 @@ export default function Project({
     router.push("/projects");
     return null;
   }
-  // function updateImagesOrder(image) {
-  //   setImages(images);
-  // }
+
   function updateImagesOrder(newImages) {
     setImages([...newImages]);
   }
-  // function handleDeleteImage(index) {
-  //   const updateImages = [...images];
-  //   uploadImages.splice(index, 1);
-  //   toast.success("Image Deleted Successfully");
-  // }
 
   function handleDeleteImage(index) {
     const updatedImages = [...images];
@@ -137,12 +122,7 @@ export default function Project({
     setImages(updatedImages);
     toast.success("Image Deleted Successfully");
   }
-  // const handleSlugChange = (ev) => {
-  //   const inputValue = ev.target.value;
-  //   const newSlug = inputValue.replace(/\s+/g, "-");
 
-  //   setSlug(newSlug);
-  // };
   const handleSlugChange = (ev) => {
     setSlug(ev.target.value.trim().replace(/\s+/g, "-").toLowerCase());
   };
@@ -296,6 +276,7 @@ export default function Project({
             </ReactSortable>
           </div>
         )}
+
         <div className="description w-100 flex flex-col flex-left nb-2">
           <label htmlFor="description">
             Blog content (for image: first upload and copy link and paste in
