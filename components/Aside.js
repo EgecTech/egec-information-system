@@ -112,6 +112,37 @@ export default function Aside({ asideOpen }) {
               )}
             </li>
 
+            {/* University */}
+            <li
+              className={
+                activeLink.includes("/universities")
+                  ? "navactive flex-col flex-left"
+                  : "flex-col flex-left"
+              }
+            >
+              <div
+                className="flex gap-1"
+                onClick={() => handleLinkClick("/universities")}
+                onMouseEnter={() => router.prefetch("/universities")}
+              >
+                <BsPostcard />
+                <span>universities</span>
+              </div>
+              {activeLink.includes("/universities") && (
+                <ul>
+                  <Link href="/universities" prefetch>
+                    <li>All universities</li>
+                  </Link>
+                  <Link href="/universities/draftuniversities" prefetch>
+                    <li>Draft universities</li>
+                  </Link>
+                  <Link href="/universities/adduniversity" prefetch>
+                    <li>Add universities</li>
+                  </Link>
+                </ul>
+              )}
+            </li>
+
             {/* Shops */}
             <li
               className={

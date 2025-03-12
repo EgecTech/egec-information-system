@@ -1,3 +1,4 @@
+// /pages/blogs/index.js
 import Dataloading from "@/components/Dataloading";
 import useFetchData from "@/hooks/useFetchData";
 import Link from "next/link";
