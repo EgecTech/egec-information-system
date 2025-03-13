@@ -1,3 +1,4 @@
+// components/University.js
 import ReactMarkdown from "react-markdown";
 import MarkdownEditor from "react-markdown-editor-lite";
 import "react-markdown-editor-lite/lib/index.css";
@@ -18,6 +19,7 @@ export default function University({
   website: existingWebsite,
   phone: existingPhone,
   location: existingLocation,
+  universitytype: existingUniversitytype,
   images: existingImages,
   status: existingStatus,
   colleges: existingColleges,
@@ -31,6 +33,9 @@ export default function University({
   const [website, setWebsite] = useState(existingWebsite || "");
   const [phone, setPhone] = useState(existingPhone || "");
   const [location, setLocation] = useState(existingLocation || "");
+  const [universitytype, setUniversitytype] = useState(
+    existingUniversitytype || ""
+  );
   const [images, setImages] = useState(existingImages || []);
   const [status, setStatus] = useState(existingStatus || "");
   const [colleges, setColleges] = useState(existingColleges || []);
@@ -38,7 +43,7 @@ export default function University({
   const [isUploading, setIsUpLoading] = useState(false);
 
   function addCollege() {
-    setColleges([...colleges, { name: "", department: "" }]);
+    setColleges([...colleges, { name: "", type: "", sector: "" }]);
   }
 
   function updateCollege(index, field, value) {
@@ -55,40 +60,42 @@ export default function University({
   async function createUnversity(ev) {
     ev.preventDefault();
 
-    if (!name || !status) {
-      toast.error("Please fill in all required fields!");
+    if (!name.trim() || !status.trim()) {
+      toast.error("يرجى ملء جميع الحقول المطلوبة!");
       return;
     }
 
     const data = {
-      name: existingName,
-      country: existingCountry,
-      email: existingEmail,
-      website: existingWebsite,
-      phone: existingPhone,
-      location: existingLocation,
-      images: existingImages,
-      status: existingStatus,
-      colleges: existingColleges,
+      name,
+      country,
+      email,
+      website,
+      phone,
+      location,
+      universitytype,
+      images,
+      status,
+      colleges,
     };
 
     try {
       if (_id) {
         await axios.put("/api/universities", { ...data, _id });
-        toast.success("Unviersity Updated");
+        toast.success("تم تحديث الجامعة بنجاح");
       } else {
         await axios.post("/api/universities", data);
-        toast.success("University Created");
+        toast.success("تم إنشاء الجامعة بنجاح");
       }
       setRedirect(true);
     } catch (error) {
       console.error(
-        "Error creating/updating universities:",
+        "خطأ أثناء حفظ بيانات الجامعة:",
         error.response?.data || error.message
       );
-      toast.error("An error occurred while saving the University.");
+      toast.error("حدث خطأ أثناء حفظ بيانات الجامعة.");
     }
   }
+
   async function uploadImages(ev) {
     const files = ev.target?.files;
     if (files?.length > 0) {
@@ -141,7 +148,7 @@ export default function University({
         {/* Unversity Name */}
         <div className="flex flex-col items-start mb-4">
           <label htmlFor="title" className="text-gray-800 font-semibold w-full">
-            Name:
+            اسم الجامعة:
           </label>
           <input
             type="text"
@@ -155,7 +162,7 @@ export default function University({
         {/* Unversity Country */}
         <div className="flex flex-col items-start mb-4">
           <label htmlFor="title" className="text-gray-800 font-semibold w-full">
-            Country:
+            دولة الجامعة
           </label>
           <input
             type="text"
@@ -169,7 +176,7 @@ export default function University({
         {/* Unversity email */}
         <div className="flex flex-col items-start mb-4">
           <label htmlFor="title" className="text-gray-800 font-semibold w-full">
-            Email:
+            ايميل الجامعة
           </label>
           <input
             type="text"
@@ -184,7 +191,7 @@ export default function University({
         {/* Unversity Website */}
         <div className="flex flex-col items-start mb-4">
           <label htmlFor="title" className="text-gray-800 font-semibold w-full">
-            Website:
+            ويب سيت الجامعة
           </label>
           <input
             type="text"
@@ -199,7 +206,7 @@ export default function University({
         {/* Unversity Phone */}
         <div className="flex flex-col items-start mb-4">
           <label htmlFor="title" className="text-gray-800 font-semibold w-full">
-            Phone:
+            تليفون الجامعة
           </label>
           <input
             type="text"
@@ -214,7 +221,7 @@ export default function University({
         {/* Unversity Location */}
         <div className="flex flex-col items-start mb-4">
           <label htmlFor="title" className="text-gray-800 font-semibold w-full">
-            Location:
+            موقع الجامعة
           </label>
           <input
             type="text"
@@ -226,13 +233,34 @@ export default function University({
           />
         </div>
 
+        {/* Unversity universitytype */}
+        <div className="flex flex-col items-start mb-4">
+          <label
+            htmlFor="universitytype"
+            className="text-gray-800 font-semibold w-full"
+          >
+            نوع الجامعة
+          </label>
+          <select
+            name="universitytype"
+            id="universitytype"
+            onChange={(ev) => setUniversitytype(ev.target.value)}
+            value={universitytype}
+          >
+            <option value="">No select</option>
+            <option value="حكومية">حكومية</option>
+            <option value="خاصة">خاصة</option>
+            <option value="أهلية">أهلية</option>
+          </select>
+        </div>
+
         {/* File Upload */}
         <div className="flex flex-col items-start mb-4">
           <label
             htmlFor="images"
             className="text-gray-800 font-semibold w-full "
           >
-            Upload Images:
+            Upload University Logo:
           </label>
           <div className="relative w-full  border-dashed border-2 border-gray-300 rounded-lg p-4 flex items-center justify-center bg-white cursor-pointer hover:border-indigo-500 transition">
             <input
@@ -245,9 +273,7 @@ export default function University({
             />
             <div className="flex flex-col items-center">
               <FaCloudUploadAlt className="text-indigo-500 text-3xl" />
-              <span className="text-gray-500">
-                Click or drag files to upload
-              </span>
+              <span className="text-gray-500">Click or drag files to logo</span>
             </div>
           </div>
           <div className="w-100 flex flex-left mt-1">
@@ -277,7 +303,7 @@ export default function University({
         )}
 
         <div className="w-100 flex flex-col flex-left mb-2">
-          <label htmlFor="colleges">Colleges</label>
+          <label htmlFor="colleges">اضف كلية أو معهد</label>
           {colleges.map((college, index) => (
             <div key={index} className="flex items-center space-x-2 mb-2">
               <input
@@ -287,30 +313,39 @@ export default function University({
                 value={college.name}
                 onChange={(e) => updateCollege(index, "name", e.target.value)}
               />
-              {/* <input
-                type="text"
-                placeholder="Department"
-                className="p-2 border border-gray-300 rounded"
-                value={college.department}
-                onChange={(e) =>
-                  updateCollege(index, "department", e.target.value)
-                }
-                
-              /> */}
-              <label className="border-gray-300" htmlFor="department">
-                Department
+              <label className="border-gray-300" htmlFor="type">
+                كلية ام معهد
               </label>
               <select
-                name="department"
-                id="department"
-                onChange={(e) =>
-                  updateCollege(index, "department", e.target.value)
-                }
-                value={college.department}
+                name="type"
+                id="type"
+                onChange={(e) => updateCollege(index, "type", e.target.value)}
+                value={college.type}
               >
                 <option value="">No select</option>
                 <option value="كلية">كلية</option>
-                <option value="معهد">معهد</option>
+                <option value="معهد">معهد عالي</option>
+                <option value="معهد">مركز تدريب</option>
+              </select>
+              <label className="border-gray-300" htmlFor="sector">
+                sector
+              </label>
+              <select
+                name="sector"
+                id="sector"
+                onChange={(e) => updateCollege(index, "sector", e.target.value)}
+                value={college.sector}
+              >
+                <option value="">No select</option>
+                <option value="طبي">طبي</option>
+                <option value="هندسي">هندسي</option>
+                <option value="حاسبات و ملومات">حاسبات و معلومات</option>
+                <option value="قانون">قانون</option>
+                <option value="تجاري">تجاري</option>
+                <option value="تربوي">تربوي</option>
+                <option value="علوم">علوم</option>
+                <option value="آداب">آداب</option>
+                <option value="دراسات إسلامية">دراسات إسلامية</option>
               </select>
               <button
                 type="button"

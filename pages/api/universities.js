@@ -1,82 +1,124 @@
-import mongoose from "mongoose";
-// import University from "../models/university.js";
+import { mongooseConnect } from "@/lib/mongoose";
 import { University } from "@/models/University";
 
-// إنشاء جامعة جديدة
-export const createUniversity = async (req, res) => {
+export default async function handle(req, res) {
   try {
-    const { name, email, website, phone, location, images, colleges } =
-      req.body;
+    await mongooseConnect(); // تأكد من الاتصال لمرة واحدة
 
-    const newUniversity = new University({
-      name,
-      email,
-      website,
-      phone,
-      location,
-      images,
-      colleges,
-    });
+    const { method } = req;
 
-    const savedUniversity = await newUniversity.save();
-    res.status(201).json(savedUniversity);
-  } catch (error) {
-    res.status(500).json({ message: "خطأ في إنشاء الجامعة", error });
-  }
-};
+    switch (method) {
+      case "POST": {
+        const {
+          name,
+          country,
+          email,
+          website,
+          phone,
+          location,
+          universitytype,
+          images,
+          status,
+          colleges,
+        } = req.body;
 
-// الحصول على جميع الجامعات
-export const getUniversities = async (req, res) => {
-  try {
-    const universities = await University.find().populate("colleges.collegeId");
-    res.status(200).json(universities);
-  } catch (error) {
-    res.status(500).json({ message: "خطأ في جلب الجامعات", error });
-  }
-};
+        if (!name || !email || !status) {
+          return res.status(400).json({ error: "Required fields are missing" });
+        }
 
-// الحصول على جامعة حسب ID
-export const getUniversityById = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const university = await University.findById(id).populate(
-      "colleges.collegeId"
-    );
-    if (!university) {
-      return res.status(404).json({ message: "الجامعة غير موجودة" });
+        const newUniversity = await University.create({
+          name,
+          country,
+          email,
+          website,
+          phone,
+          location,
+          universitytype,
+          images,
+          status,
+          colleges,
+        });
+
+        return res.status(201).json(newUniversity);
+      }
+
+      case "GET": {
+        if (req.query?.id) {
+          const university = await University.findById(req.query.id).lean();
+          if (!university)
+            return res.status(404).json({ error: "University not found" });
+          return res.json(university);
+        }
+
+        const universities = await University.find().sort({ _id: -1 }).lean();
+        return res.json(universities);
+      }
+
+      case "PUT": {
+        const {
+          _id,
+          name,
+          country,
+          email,
+          website,
+          phone,
+          location,
+          universitytype,
+          images,
+          status,
+          colleges,
+        } = req.body;
+
+        if (!_id)
+          return res.status(400).json({ error: "University ID is required" });
+
+        const updatedUniversity = await University.findByIdAndUpdate(
+          _id,
+          {
+            name,
+            country,
+            email,
+            website,
+            phone,
+            location,
+            universitytype,
+            images,
+            status,
+            colleges,
+          },
+          { new: true, lean: true }
+        );
+
+        if (!updatedUniversity)
+          return res.status(404).json({ error: "University not found" });
+
+        return res.json(updatedUniversity);
+      }
+
+      case "DELETE": {
+        const { id } = req.query;
+        if (!id)
+          return res
+            .status(400)
+            .json({ error: "University ID is required for deletion" });
+
+        const deletedUniversity = await University.findByIdAndDelete(id);
+        if (!deletedUniversity)
+          return res.status(404).json({ error: "University not found" });
+
+        return res.json({
+          success: true,
+          message: "University deleted successfully",
+        });
+      }
+
+      default:
+        return res.status(405).json({ error: "Method Not Allowed" });
     }
-    res.status(200).json(university);
   } catch (error) {
-    res.status(500).json({ message: "خطأ في جلب بيانات الجامعة", error });
+    console.error("API Error:", error);
+    return res
+      .status(500)
+      .json({ error: "Internal Server Error", details: error.message });
   }
-};
-
-// تحديث بيانات جامعة
-export const updateUniversity = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const updatedUniversity = await University.findByIdAndUpdate(id, req.body, {
-      new: true,
-    });
-    if (!updatedUniversity) {
-      return res.status(404).json({ message: "الجامعة غير موجودة" });
-    }
-    res.status(200).json(updatedUniversity);
-  } catch (error) {
-    res.status(500).json({ message: "خطأ في تحديث بيانات الجامعة", error });
-  }
-};
-
-// حذف جامعة
-export const deleteUniversity = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const deletedUniversity = await University.findByIdAndDelete(id);
-    if (!deletedUniversity) {
-      return res.status(404).json({ message: "الجامعة غير موجودة" });
-    }
-    res.status(200).json({ message: "تم حذف الجامعة بنجاح" });
-  } catch (error) {
-    res.status(500).json({ message: "خطأ في حذف الجامعة", error });
-  }
-};
+}

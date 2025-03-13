@@ -1,33 +1,26 @@
-import mongoose from "mongoose";
+const { Schema, models, model } = require("mongoose");
 
-const collegeSchema = new mongoose.Schema({
-  collegeId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "College",
-    required: true,
-  },
+const collegeSchema = new Schema({
   name: { type: String, required: true },
-  type: {
-    type: String,
-  },
+  type: { type: String },
+  sector: { type: String },
 });
 
-const universitySchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  country: { type: String, required: true },
-  email: { type: String },
-  website: { type: String },
-  phone: { type: String },
-  location: { type: String },
-  images: [{ type: String }],
-  status: {
-    type: String,
-    default: "draft",
+const universitySchema = new Schema(
+  {
+    name: { type: String, required: true },
+    country: { type: String, required: true },
+    email: { type: String },
+    website: { type: String },
+    phone: { type: String },
+    location: { type: String },
+    universityType: { type: String },
+    images: [{ type: String }],
+    status: { type: String },
+    colleges: [collegeSchema],
   },
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now },
-  colleges: [collegeSchema],
-});
+  { timestamps: true } // يقوم بإضافة createdAt و updatedAt تلقائيًا
+);
 
-const University = mongoose.model("University", universitySchema);
-export default University;
+export const University =
+  models.University || model("University", universitySchema, "universities");
