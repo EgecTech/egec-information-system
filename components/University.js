@@ -135,10 +135,6 @@ export default function University({
     toast.success("Image Deleted Successfully");
   }
 
-  const handleSlugChange = (ev) => {
-    setSlug(ev.target.value.trim().replace(/\s+/g, "-").toLowerCase());
-  };
-
   return (
     <>
       <form
@@ -147,7 +143,7 @@ export default function University({
       >
         {/* Unversity Name */}
         <div className="flex flex-col items-start mb-4">
-          <label htmlFor="title" className="text-gray-800 font-semibold w-full">
+          <label htmlFor="name" className="text-gray-800 font-semibold w-full">
             اسم الجامعة:
           </label>
           <input
@@ -161,21 +157,31 @@ export default function University({
         </div>
         {/* Unversity Country */}
         <div className="flex flex-col items-start mb-4">
-          <label htmlFor="title" className="text-gray-800 font-semibold w-full">
+          <label
+            htmlFor="country"
+            className="text-gray-800 font-semibold w-full"
+          >
             دولة الجامعة
           </label>
-          <input
-            type="text"
+
+          <select
+            name="country"
             id="country"
-            placeholder="Enter University country"
-            className="w-full p-3 border border-gray-300 rounded-lg shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            value={country}
             onChange={(ev) => setCountry(ev.target.value)}
-          />
+            value={country}
+            className="p-2 border rounded-md"
+          >
+            <option value="">🌍 اختر الدولة</option>
+            <option value="مصر">🇪🇬 مصر</option>
+            <option value="السعودية">🇸🇦 السعودية</option>
+            <option value="الإمارات">🇦🇪 الإمارات</option>
+            <option value="تركيا">🇹🇷 تركيا</option>
+          </select>
         </div>
+
         {/* Unversity email */}
         <div className="flex flex-col items-start mb-4">
-          <label htmlFor="title" className="text-gray-800 font-semibold w-full">
+          <label htmlFor="email" className="text-gray-800 font-semibold w-full">
             ايميل الجامعة
           </label>
           <input
@@ -190,7 +196,10 @@ export default function University({
 
         {/* Unversity Website */}
         <div className="flex flex-col items-start mb-4">
-          <label htmlFor="title" className="text-gray-800 font-semibold w-full">
+          <label
+            htmlFor="website"
+            className="text-gray-800 font-semibold w-full"
+          >
             ويب سيت الجامعة
           </label>
           <input
@@ -205,7 +214,7 @@ export default function University({
 
         {/* Unversity Phone */}
         <div className="flex flex-col items-start mb-4">
-          <label htmlFor="title" className="text-gray-800 font-semibold w-full">
+          <label htmlFor="phone" className="text-gray-800 font-semibold w-full">
             تليفون الجامعة
           </label>
           <input
@@ -220,7 +229,10 @@ export default function University({
 
         {/* Unversity Location */}
         <div className="flex flex-col items-start mb-4">
-          <label htmlFor="title" className="text-gray-800 font-semibold w-full">
+          <label
+            htmlFor="location"
+            className="text-gray-800 font-semibold w-full"
+          >
             موقع الجامعة
           </label>
           <input
@@ -313,7 +325,7 @@ export default function University({
                 value={college.name}
                 onChange={(e) => updateCollege(index, "name", e.target.value)}
               />
-              <label className="border-gray-300" htmlFor="type">
+              <label className="border-gray-300 text-nowrap" htmlFor="type">
                 كلية ام معهد
               </label>
               <select

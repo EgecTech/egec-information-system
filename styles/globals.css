@@ -12,7 +12,10 @@ body {
     font-weight: 600;
     overflow-x: hidden;
 }
-
+body  select {
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+  }
+  
 /* ================================================== */
 
 /* Flex class */

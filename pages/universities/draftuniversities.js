@@ -2,29 +2,32 @@ import Dataloading from "@/components/Dataloading";
 import useFetchData from "@/hooks/useFetchData";
 import Link from "next/link";
 import { useState } from "react";
-import { FaUniversity } from "react-icons/fa";
+import { SiBloglovin } from "react-icons/si";
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 
-export default function DraftUniversities() {
+export default function Universities() {
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage] = useState(7);
   const [searchQuery, setSearchQuery] = useState("");
 
   const { data: allData, loading } = useFetchData("/api/universities");
 
+  const paginate = (pageNumbers) => {
+    setCurrentPage(pageNumbers);
+  };
   // تصفية البيانات بناءً على البحث
   const filteredUniversities =
     searchQuery.trim() === ""
       ? allData
       : allData.filter((university) =>
-          university.name.toLowerCase().includes(searchQuery.toLowerCase())
+          university.title.toLowerCase().includes(searchQuery.toLowerCase())
         );
 
-  // حساب عدد الجامعات بعد التصفية
-  const allUniversities = filteredUniversities.length;
+  // حساب عدد المدونات بعد التصفية
+  const allUniversity = filteredUniversities.length;
 
-  // تحديد الجامعات لعرضها في الصفحة الحالية
+  // تحديد المدونات لعرضها في الصفحة الحالية
   const indexOfFirstUniversity = (currentPage - 1) * perPage;
   const indexOfLastUniversity = currentPage * perPage;
   const currentUniversities = filteredUniversities.slice(
@@ -32,20 +35,20 @@ export default function DraftUniversities() {
     indexOfLastUniversity
   );
 
-  // تصفية الجامعات غير المنشورة فقط
-  const draftUniversities = currentUniversities.filter(
-    (university) => university.status === "draft"
+  // تصفية المدونات المنشورة فقط
+  const publishedUniversities = currentUniversities.filter(
+    (ab) => ab.status === "draft"
   );
 
   // إنشاء أرقام الصفحات
   const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(allUniversities / perPage); i++) {
+  for (let i = 1; i <= Math.ceil(allUniversity / perPage); i++) {
     pageNumbers.push(i);
   }
 
   return (
     <>
-      <div className="university-page">
+      <div className="blogpage">
         <div className="titledashboard flex flex-sb">
           <div>
             <h2>
@@ -54,16 +57,16 @@ export default function DraftUniversities() {
             <h3>ADMIN PANEL</h3>
           </div>
           <div className="breadcrumb">
-            <FaUniversity /> <span>/</span>
-            <span>Add University</span>
+            <SiBloglovin /> <span>/</span>
+            <span>AddUniversities</span>
           </div>
         </div>
-        <div className="university-table">
+        <div className="blogstable">
           <div className="flex gap-2 mb-1">
             <h2>Search Universities:</h2>
             <input
               type="text"
-              placeholder="Search by name..."
+              placeholder="Search by title..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -74,6 +77,7 @@ export default function DraftUniversities() {
                 <th className="px-5 py-3 text-center w-12">#</th>
                 <th className="px-5 py-3 text-center">Logo</th>
                 <th className="px-5 py-3">Name</th>
+                <th className="px-5 py-3">Country</th>
                 <th className="px-5 py-3 text-center">Actions</th>
               </tr>
             </thead>
@@ -84,14 +88,14 @@ export default function DraftUniversities() {
                     <Dataloading />
                   </td>
                 </tr>
-              ) : draftUniversities.length === 0 ? (
+              ) : publishedUniversities.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="text-center py-6 text-gray-500">
-                    No Draft Universities Found
+                  <td colSpan={5} className="text-center py-6 text-gray-500">
+                    No Universities Found
                   </td>
                 </tr>
               ) : (
-                draftUniversities.map((university, index) => (
+                publishedUniversities.map((university, index) => (
                   <tr
                     key={university._id}
                     className="hover:bg-gray-100 transition duration-200"
@@ -108,6 +112,9 @@ export default function DraftUniversities() {
                     </td>
                     <td className="px-5 py-4 text-gray-800 font-semibold">
                       {university.name}
+                    </td>
+                    <td className="px-5 py-4 text-gray-800 font-semibold">
+                      {university.country}
                     </td>
                     <td className="px-5 py-4 text-center">
                       <div className="flex justify-center space-x-3">
@@ -128,6 +135,38 @@ export default function DraftUniversities() {
               )}
             </tbody>
           </table>
+          {publishedUniversities.length === 0 ? (
+            ""
+          ) : (
+            <div className="blogpagination">
+              <button
+                onClick={() => paginate(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </button>
+              {pageNumbers
+                .slice(
+                  Math.max(currentPage - 3, 0),
+                  Math.min(currentPage + 2, pageNumbers.length)
+                )
+                .map((number) => (
+                  <button
+                    key={number}
+                    onClick={() => paginate(number)}
+                    className={`${currentPage === number ? "active" : ""}`}
+                  >
+                    {number}
+                  </button>
+                ))}
+              <button
+                onClick={() => paginate(currentPage + 1)}
+                disabled={currentUniversities.length < perPage}
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </>

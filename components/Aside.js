@@ -224,8 +224,15 @@ export default function Aside({ asideOpen }) {
               <span>Setting</span>
             </li>
           </ul>
-
+          {/* 
           <button onClick={() => signOut()} className="logoutbtn">
+            Logout
+          </button> */}
+
+          <button
+            onClick={() => signOut({ callbackUrl: "/auth/signin" })}
+            className="logoutbtn"
+          >
             Logout
           </button>
         </aside>

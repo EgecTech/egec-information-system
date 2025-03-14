@@ -26,6 +26,7 @@ export default function Home() {
   );
   const [blogsData, setBlogsData] = useState([]);
   const [projectData, setProjectData] = useState([]);
+  const [universityData, setUniversityData] = useState([]);
   const [photosData, setPhotosData] = useState([]);
   const [shopData, setShopData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -48,15 +49,18 @@ export default function Home() {
       try {
         const response = await fetch("/api/blogs");
         const responseproject = await fetch("/api/projects");
+        const responseuniversity = await fetch("/api/universities");
         const responseShop = await fetch("api/shops");
         const responseGallery = await fetch("api/photos");
         const data = await response.json();
         const dataProject = await responseproject.json();
+        const dataUniversity = await responseuniversity.json();
         const dataShop = await responseShop.json();
         const dataPhotos = await responseGallery.json();
 
         setBlogsData(data);
         setProjectData(dataProject);
+        setUniversityData(dataUniversity);
         setShopData(dataShop);
         setPhotosData(dataPhotos);
         setLoading(false);
@@ -67,7 +71,7 @@ export default function Home() {
     fetchData();
   }, []);
 
-  const monthlyData = blogsData
+  const monthlyData = universityData
     .filter((dat) => dat.status === "publish")
     .reduce((acc, blog) => {
       const year = new Date(blog.createdAt).getFullYear();
@@ -132,9 +136,12 @@ export default function Home() {
 
           <div className="topfourcards flex flex-sb">
             <div className="four_card">
-              <h2>Total Blogs</h2>
+              <h2>Total Universities</h2>
               <span>
-                {blogsData.filter((dat) => dat.status === "publish").length}
+                {
+                  universityData.filter((dat) => dat.status === "publish")
+                    .length
+                }
               </span>
             </div>
             <div className="four_card">
@@ -144,13 +151,13 @@ export default function Home() {
               </span>
             </div>
             <div className="four_card">
-              <h2>Total Products</h2>
+              <h2>Total Colleges</h2>
               <span>
                 {shopData.filter((dat) => dat.status === "publish").length}
               </span>
             </div>
             <div className="four_card">
-              <h2>Gallery Photos</h2>
+              <h2>Total Specialties</h2>
               <span>{photosData.length}</span>
             </div>
           </div>
@@ -196,7 +203,7 @@ export default function Home() {
                   </thead>
                   <tbody>
                     <tr>
-                      <td>Node Js</td>
+                      <td>تخصص 1</td>
                       <td>
                         {
                           blogsData.filter(
@@ -206,7 +213,7 @@ export default function Home() {
                       </td>
                     </tr>
                     <tr>
-                      <td>React Js</td>
+                      <td> تخصص 2</td>
                       <td>
                         {
                           blogsData.filter(
@@ -216,7 +223,7 @@ export default function Home() {
                       </td>
                     </tr>
                     <tr>
-                      <td>Next Js</td>
+                      <td> تخصص 2</td>
                       <td>
                         {
                           blogsData.filter(
@@ -226,7 +233,7 @@ export default function Home() {
                       </td>
                     </tr>
                     <tr>
-                      <td>Css</td>
+                      <td>تخصص 3</td>
                       <td>
                         {
                           blogsData.filter(
@@ -236,7 +243,7 @@ export default function Home() {
                       </td>
                     </tr>
                     <tr>
-                      <td>Digital Marketing</td>
+                      <td>تخصص 4 </td>
                       <td>
                         {
                           blogsData.filter(
@@ -246,7 +253,7 @@ export default function Home() {
                       </td>
                     </tr>
                     <tr>
-                      <td>Flutter Dev</td>
+                      <td>تخصص 5 </td>
                       <td>
                         {
                           blogsData.filter(
@@ -256,7 +263,7 @@ export default function Home() {
                       </td>
                     </tr>
                     <tr>
-                      <td>Database</td>
+                      <td>تخصص 6</td>
                       <td>
                         {
                           blogsData.filter(
@@ -266,7 +273,7 @@ export default function Home() {
                       </td>
                     </tr>
                     <tr>
-                      <td>Deployment</td>
+                      <td>تخصص 7</td>
                       <td>
                         {
                           blogsData.filter(
@@ -276,7 +283,7 @@ export default function Home() {
                       </td>
                     </tr>
                     <tr>
-                      <td>Next Js</td>
+                      <td> تخصص 8</td>
                       <td>
                         {
                           blogsData.filter(
